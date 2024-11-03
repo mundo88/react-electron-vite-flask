@@ -13,7 +13,6 @@ export default function useAxiosPrivate() {
 
         const requestIntercept = axiosServerInstance.interceptors.request.use(
             (config) => {
-
                 if (!config.headers["Authorization"]) {
                     config.headers['Authorization'] = `Bearer ${accessToken}`;
                     config.headers['X-CSRFToken'] = csrftoken

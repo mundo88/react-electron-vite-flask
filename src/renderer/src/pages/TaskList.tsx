@@ -1,21 +1,32 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { IconFile, IconPlayerPlay, IconTrash } from '@tabler/icons-react';
+import ITask from '@renderer/@types/ITask';
+import { useEffect, useState } from 'react';
+import useAxiosPrivate from '@renderer/hooks/useAxiosPrivate';
 
 export default function TaskList() {
-  const [tasks,setTasks] = useState([])
-
+  const [tasks,setTasks] = useState<ITask[]>()
+  const {axiosServerInstance} = useAxiosPrivate()
 
   const removeTask = (task_id)=>{
-    const new_tasks = tasks.filter(task=>task.id !== task_id)
-    setTasks(new_tasks)
+    if (tasks) {
+      const new_tasks = tasks.filter(task=>task.id !== task_id)
+      setTasks(new_tasks)
+      axiosServerInstance.delete(`/tasks/${task_id}/`).then(res=>{
+        console.log(res.data)
+      })
+    }
   }
-  
+  useEffect(()=>{
+    axiosServerInstance.get('/tasks/').then(res=>{
+      setTasks(res.data)
+    })
+  },[])
   return (
     <div className='p-6'>
         <h2 className='text-2xl font-bold'>TaskList</h2>
         <div className='grid grid-cols-5 mt-8 gap-6'>
-            {tasks.map((task,index)=>(
+            {tasks && tasks.map((task,index)=>(
                 <div key={index} className='p-2 gap-4 rounded-md border border-gray-300 shadow-sm flex items-center justify-between'>
                     <Link className="flex gap-4" to={"/tasks/edit/"+task.id} >
                       <div className={' aspect-square rounded-md flex items-center justify-center overflow-hidden '}>

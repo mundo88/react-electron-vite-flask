@@ -2,6 +2,7 @@ import Nav from '@renderer/components/Nav';
 import SideBar from '../components/SideBar'
 import { Outlet } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 export default function Layout() {
   
   return (
@@ -11,6 +12,7 @@ export default function Layout() {
             <Nav></Nav>
             <Outlet/>
         </div>
+        <ToastContainer position="top-right" />
     </div>
   )
 }

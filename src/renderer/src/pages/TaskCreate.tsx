@@ -1,9 +1,10 @@
+import useAxiosPrivate from '@renderer/hooks/useAxiosPrivate'
 import Task from './Task'
-import { useNavigate } from 'react-router-dom'
+import ITask from '@renderer/@types/ITask'
 
 export default function TaskCreate() {
-  const navigate = useNavigate()
-  const defaultTask = {
+  const {axiosServerInstance} = useAxiosPrivate()
+  const defaultTask:ITask = {
     title:"App mới",
     platform : "mobie",
     nodes : [],
@@ -11,8 +12,9 @@ export default function TaskCreate() {
   }
   const onSave = ({title,platform,nodes,edges})=>{
     const data = {title,platform,nodes,edges}
-    console.log(data)
-
+    axiosServerInstance.post('/tasks/',data).then(res=>{
+      console.log(res.data)
+    })
   }
   return (
     <Task task={defaultTask} onSave={onSave}/>
